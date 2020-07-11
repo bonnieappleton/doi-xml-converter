@@ -4,7 +4,13 @@
             [compojure.route :as route])
   (:gen-class))
 
+(defn article-json [req]
+  {:status  400
+   :headers {"Content-Type" "text/html"}
+   :body    (str "Invalid DOI: " (-> req :route-params :doi))})
+
 (defroutes app-routes
+           (GET "/works/:doi" [doi] article-json)
            (route/not-found "Error, page not found!"))
 
 (defn -main [& args]
