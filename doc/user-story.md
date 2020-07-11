@@ -44,7 +44,7 @@ a JSON REST API.
   
 ### Acceptance Criteria
 
-####1.  A valid DOI that exists
+#### 1.  A valid DOI that exists
 
 **Given** a valid DOI that exists, 10.5555/12345678
 
@@ -63,7 +63,7 @@ a JSON REST API.
         "member": "17333" 
     }
     
-####2. A valid DOI that does not exist
+#### 2. A valid DOI that does not exist
 
 **Given** a valid DOI that does not exist, 10.5555/11111111
 
@@ -71,10 +71,24 @@ a JSON REST API.
 
 **Then** you receive a 404 NOT FOUND response
 
-####3. An invalid DOI
+#### 3. An invalid DOI
 
 **Given** an invalid DOI, not-a-doi
 
 **When** you perform a GET request to the endpoint /works/not-a-doi
 
 **Then** you receive a 400 BAD REQUEST response
+
+#### 4. An invalid URL
+
+**Given** an invalid endpoint, /not-an-endpoint
+
+**When** you perform a GET request to the endpoint /not-an-endpoint
+
+**Then** you receive a 404 NOT FOUND response
+
+
+## Technical Details
+
+* Should package into a Docker image suitable to run in a container service.
+* Should run on a configurable port.
