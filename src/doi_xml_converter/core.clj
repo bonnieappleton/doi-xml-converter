@@ -1,17 +1,26 @@
 (ns doi-xml-converter.core
   (:require [org.httpkit.server :as server]
             [compojure.core :refer :all]
-            [compojure.route :as route])
+            [compojure.route :as route]
+            [doi-xml-converter.article :as article])
   (:gen-class))
 
-(defn article-json [req]
-  (if (re-matches #"^10\.\d+\/\w+$" (-> req :route-params :doi))
-    {:status  404
-     :headers {"Content-Type" "text/json"}
-     :body    (str "DOI " (-> req :route-params :doi) " does not exist")}
-    {:status  400
-     :headers {"Content-Type" "text/json"}
-     :body    (str "Invalid DOI: " (-> req :route-params :doi))}))
+(defmulti article-json (fn [{{:keys [doi]} :route-params}] (some? (re-matches #"^10\.\d+\/\w+$" doi))))
+
+(defmethod article-json true [{{:keys [doi]} :route-params}]
+  (let [response-json (article/article-from-doi doi)]
+    (if (some? response-json)
+      {:status  200
+       :headers {"Content-Type" "text/json"}
+       :body    response-json}
+      {:status  404
+       :headers {"Content-Type" "text/json"}
+       :body    (str "DOI " doi " does not exist")})))
+
+(defmethod article-json false [{{:keys [doi]} :route-params}]
+  {:status  400
+   :headers {"Content-Type" "text/json"}
+   :body    (str "Invalid DOI: " doi)})
 
 (defroutes app-routes
            (GET "/works/:doi{.*}" [doi] article-json)

@@ -6,7 +6,9 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [compojure "1.6.1"]
                  [http-kit "2.3.0"]
-                 [ring/ring-mock "0.3.2"]]
+                 [ring/ring-mock "0.3.2"]
+                 [cheshire "5.10.0"]
+                 [clj-http "3.10.1"]]
   :main ^:skip-aot doi-xml-converter.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
