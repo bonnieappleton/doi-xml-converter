@@ -201,9 +201,10 @@
     (with-redefs (client/get (fn [_] {:status 404}))
       (is (= nil (article-from-doi "doi-does-not-exist")))))
   (testing "should return article info map if doi exists"
-      (with-redefs (client/get (fn [_] {:body xml-from-crossref}))
-        (is (= {:is-referenced-by-count "2"}
-               (article-from-doi "doi-exists"))))))
+    (with-redefs (client/get (fn [_] {:body xml-from-crossref}))
+      (is (= {:is-referenced-by-count "2"
+              :publisher              "Society of Psychoceramics"}
+             (article-from-doi "doi-exists"))))))
 
 (deftest parse-xml-test
   (testing "should convert xml to clojure map"
@@ -230,8 +231,8 @@
     (let [query-list [{:tag     :doi,
                        :attrs   {:type "journal_article"},
                        :content ["10.5555/12345678"]}
-                      {:tag :crm-item,
-                       :attrs {:type "number", :name "citedby-count"},
+                      {:tag     :crm-item,
+                       :attrs   {:type "number", :name "citedby-count"},
                        :content ["2"]}
                       {:tag     :crm-item,
                        :attrs   {:type "string", :name "prefix-name"},
@@ -242,19 +243,19 @@
                        :attrs   {:type "journal_article"},
                        :content ["10.5555/12345678"]}
                       {:tag     :crm-item,
-                       :attrs   {:type "string", :name "prefix-name"},
+                       :attrs   {:type "string", :name "publisher-name"},
                        :content ["Society of Psychoceramics"]}
                       {:tag   :crm-item,
                        :attrs {:type "number", :name "member-id"}}
-                      {:tag :crm-item,
-                       :attrs {:type "number", :name "citedby-count"},
+                      {:tag     :crm-item,
+                       :attrs   {:type "number", :name "citedby-count"},
                        :content ["2"]}
-                      {:tag :crm-item,
-                       :attrs {:type "number", :name "member-id"},
+                      {:tag     :crm-item,
+                       :attrs   {:type "number", :name "member-id"},
                        :content ["17333"]}]]
       (is (= {;:DOI                    "10.5555/12345678"
               :is-referenced-by-count "2"
-              ;:publisher              "Society of Psychoceramics"
+              :publisher              "Society of Psychoceramics"
               ;:type                   :journal-article
               ;:title                  ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
               ;:member                 17333
