@@ -1,6 +1,6 @@
 # doi-xml-converter
 
-An app that converts application data from xml to json from the DOI
+An app that converts application data from xml to json using the DOI
 
 ## Installation
 
@@ -14,7 +14,6 @@ Clone the code from https://github.com/bonnieappleton/doi-xml-converter
 
 ## Usage
 
-
 To run the app:
 
     $ lein run
@@ -22,20 +21,32 @@ To run the app:
 To run the tests:
 
     $ lein test
+    
+#### Using Docker
 
-## Options
+    $ docker build -t doi-xml-converter .
+    $ docker run -d -p 8000:8000 doi-xml-converter
 
-## Examples
+## The API
 
-...
+The endpoint `/works/{DOI}` returns JSON with the following fields for the given DOI
 
-### Bugs
+  - DOI
+  - is-referenced-by-count
+  - publisher
+  - type
+  - title
+  - member
 
-...
+#### Example
 
-## License
+Go to `http://localhost:8000/works/10.2307/1320590` to see the JSON output once the app is running on your machine
 
-Copyright © 2020 Bonnie Appleton
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+    {
+        "DOI":"10.2307/1320590",
+        "is-referenced-by-count":"0",
+        "publisher":"Informa UK Limited",
+        "type":"journal-article",
+        "title":["An Artist of the American Renaissance: The Letters of Kenyon Cox, 1883-1919"],
+        "member":"301"
+    }
