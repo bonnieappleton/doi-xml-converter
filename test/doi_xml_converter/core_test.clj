@@ -17,14 +17,9 @@
     (let [response (app-routes (mock/request :get "/works/10.5555/11111111"))]
       (is (= 404 (:status response)))
       (is (= "DOI 10.5555/11111111 does not exist" (:body response)))))
-  #_(testing "should return 200 response for GET request to a valid DOI"
+  (testing "should return 200 response for GET request to a valid DOI"
     (let [response (app-routes (mock/request :get "/works/10.5555/12345678"))]
       (is (= 200 (:status response)))
       (is (= (generate-string
-               {:DOI                    "10.5555/12345678"
-                :is-referenced-by-count 2
-                :publisher              "Society of Psychoceramics"
-                :type                   :journal-article
-                :title                  ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
-                :member                 17333})
+               {:is-referenced-by-count "2"})
              (:body response))))))

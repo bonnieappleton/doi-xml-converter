@@ -2,7 +2,8 @@
   (:require [org.httpkit.server :as server]
             [compojure.core :refer :all]
             [compojure.route :as route]
-            [doi-xml-converter.article :as article])
+            [doi-xml-converter.article :as article]
+            [cheshire.core :refer :all])
   (:gen-class))
 
 (defmulti article-json (fn [{{:keys [doi]} :route-params}] (some? (re-matches #"^10\.\d+\/\w+$" doi))))
@@ -12,7 +13,7 @@
     (if (some? response-json)
       {:status  200
        :headers {"Content-Type" "text/json"}
-       :body    response-json}
+       :body    (generate-string response-json)}
       {:status  404
        :headers {"Content-Type" "text/json"}
        :body    (str "DOI " doi " does not exist")})))

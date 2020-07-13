@@ -40,7 +40,7 @@ a JSON REST API.
 ### Assumptions
 
 * If the DOI is valid and exists then all required fields exist for that article
-  
+* Only needs to work for journal-article content type
   
 ### Acceptance Criteria
 
