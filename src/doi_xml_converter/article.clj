@@ -5,7 +5,7 @@
             [clojure.java.io :as io])
   (:import (java.io ByteArrayInputStream)))
 
-(defn crm-content [query-list name]
+(defn crm-content-from [query-list name]
   (->> query-list
        (filter #(= (:tag %) :crm-item))
        (filter #(= (:name (:attrs %)) name))
@@ -13,10 +13,12 @@
        :content
        first))
 
-(defn article-info-map [query-list]
-  {:is-referenced-by-count (crm-content query-list "citedby-count")
-   :publisher              (crm-content query-list "publisher-name")
-   :member                 (crm-content query-list "member-id")})
+(defn article-info-map [query-list doi]
+  {:DOI                    doi
+   :is-referenced-by-count (crm-content-from query-list "citedby-count")
+   :publisher              (crm-content-from query-list "publisher-name")
+   :type                   :journal-article
+   :member                 (crm-content-from query-list "member-id")})
 
 
 (defn query-tag [xml-map]
@@ -35,6 +37,6 @@
            :body
            parse-xml
            query-tag
-           article-info-map)
+           (article-info-map doi))
        (catch Exception e nil)))
 

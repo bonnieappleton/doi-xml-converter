@@ -21,10 +21,10 @@
     (let [response (app-routes (mock/request :get "/works/10.5555/12345678"))]
       (is (= 200 (:status response)))
       (is (= (generate-string
-               {;:DOI                    "10.5555/12345678"
+               {:DOI                    "10.5555/12345678"
                 :is-referenced-by-count "2"
                 :publisher              "Society of Psychoceramics"
-                ;:type                   :journal-article
+                :type                   :journal-article
                 ;:title                  ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
                 :member                 "17333"
                 })

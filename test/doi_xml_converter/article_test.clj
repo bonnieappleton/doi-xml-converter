@@ -202,8 +202,10 @@
       (is (= nil (article-from-doi "doi-does-not-exist")))))
   (testing "should return article info map if doi exists"
     (with-redefs (client/get (fn [_] {:body xml-from-crossref}))
-      (is (= {:is-referenced-by-count "2"
+      (is (= {:DOI                    "doi-exists"
+              :is-referenced-by-count "2"
               :publisher              "Society of Psychoceramics"
+              :type                   :journal-article
               :member                 "17333"}
              (article-from-doi "doi-exists"))))))
 
@@ -238,11 +240,12 @@
                       {:tag     :crm-item,
                        :attrs   {:type "string", :name "prefix-name"},
                        :content ["Society of Psychoceramics"]}]]
-      (is (= "2" (crm-content query-list "citedby-count")))))
+      (is (= "2" (crm-content-from query-list "citedby-count")))))
   (testing "should turn query list into article info map"
-    (let [query-list [{:tag     :doi,
+    (let [doi "10.5555/12345678"
+          query-list [{:tag     :doi,
                        :attrs   {:type "journal_article"},
-                       :content ["10.5555/12345678"]}
+                       :content [doi]}
                       {:tag     :crm-item,
                        :attrs   {:type "string", :name "publisher-name"},
                        :content ["Society of Psychoceramics"]}
@@ -255,12 +258,11 @@
                       {:tag     :crm-item,
                        :attrs   {:type "number", :name "member-id"},
                        :content ["17333"]}]]
-      (is (= {;:DOI                    "10.5555/12345678"
+      (is (= {:DOI                    "10.5555/12345678"
               :is-referenced-by-count "2"
               :publisher              "Society of Psychoceramics"
-              ;:type                   :journal-article
+              :type                   :journal-article
               ;:title                  ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
               :member                 "17333"
               }
-             (article-info-map query-list)))))
-  )
+             (article-info-map query-list doi))))))
