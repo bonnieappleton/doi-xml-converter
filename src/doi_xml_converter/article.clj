@@ -15,7 +15,8 @@
 
 (defn article-info-map [query-list]
   {:is-referenced-by-count (crm-content query-list "citedby-count")
-   :publisher              (crm-content query-list "publisher-name")})
+   :publisher              (crm-content query-list "publisher-name")
+   :member                 (crm-content query-list "member-id")})
 
 
 (defn query-tag [xml-map]

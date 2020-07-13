@@ -203,7 +203,8 @@
   (testing "should return article info map if doi exists"
     (with-redefs (client/get (fn [_] {:body xml-from-crossref}))
       (is (= {:is-referenced-by-count "2"
-              :publisher              "Society of Psychoceramics"}
+              :publisher              "Society of Psychoceramics"
+              :member                 "17333"}
              (article-from-doi "doi-exists"))))))
 
 (deftest parse-xml-test
@@ -245,8 +246,9 @@
                       {:tag     :crm-item,
                        :attrs   {:type "string", :name "publisher-name"},
                        :content ["Society of Psychoceramics"]}
-                      {:tag   :crm-item,
-                       :attrs {:type "number", :name "member-id"}}
+                      {:tag     :crm-item,
+                       :attrs   {:type "number", :name "member-id"}
+                       :content ["17333"]}
                       {:tag     :crm-item,
                        :attrs   {:type "number", :name "citedby-count"},
                        :content ["2"]}
@@ -258,7 +260,7 @@
               :publisher              "Society of Psychoceramics"
               ;:type                   :journal-article
               ;:title                  ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
-              ;:member                 17333
+              :member                 "17333"
               }
              (article-info-map query-list)))))
   )

@@ -26,6 +26,6 @@
                 :publisher              "Society of Psychoceramics"
                 ;:type                   :journal-article
                 ;:title                  ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
-                ;:member                 17333
+                :member                 "17333"
                 })
              (:body response))))))
