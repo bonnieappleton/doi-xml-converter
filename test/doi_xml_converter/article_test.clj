@@ -206,6 +206,7 @@
               :is-referenced-by-count "2"
               :publisher              "Society of Psychoceramics"
               :type                   :journal-article
+              :title                  ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
               :member                 "17333"}
              (article-from-doi "doi-exists"))))))
 
@@ -241,6 +242,32 @@
                        :attrs   {:type "string", :name "prefix-name"},
                        :content ["Society of Psychoceramics"]}]]
       (is (= "2" (crm-content-from query-list "citedby-count")))))
+  (testing "should get title from query list"
+    (let [query-list [{:tag     :doi,
+                       :attrs   {:type "journal_article"},
+                       :content ["10.5555/12345678"]}
+                      {:tag :doi_record,
+                       :attrs nil,
+                       :content [{:tag :crossref,
+                                  :attrs {:xsi:schemaLocation "http://www.crossref.org/xschema/1.1 http://doi.crossref.org/schemas/unixref1.1.xsd",
+                                          :xmlns "http://www.crossref.org/xschema/1.1"},
+                                  :content [{:tag :journal,
+                                             :attrs nil,
+                                             :content [{:tag :journal_metadata,
+                                                        :attrs {:language "en"},
+                                                        :content []}
+                                                       {:tag :journal_article,
+                                                        :attrs {:language "en"},
+                                                        :content [{:tag :titles,
+                                                                   :attrs nil,
+                                                                   :content [{:tag :title,
+                                                                              :attrs nil,
+                                                                              :content ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]}]}
+                                                                  {:tag :contributors,
+                                                                   :attrs nil,
+                                                                   :content []}]}]}]}]}]]
+      (is (= ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
+          (title-from query-list)))))
   (testing "should turn query list into article info map"
     (let [doi "10.5555/12345678"
           query-list [{:tag     :doi,
@@ -258,11 +285,4 @@
                       {:tag     :crm-item,
                        :attrs   {:type "number", :name "member-id"},
                        :content ["17333"]}]]
-      (is (= {:DOI                    "10.5555/12345678"
-              :is-referenced-by-count "2"
-              :publisher              "Society of Psychoceramics"
-              :type                   :journal-article
-              ;:title                  ["Toward a Unified Theory of High-Energy Metaphysics: Silly String Theory"]
-              :member                 "17333"
-              }
-             (article-info-map query-list doi))))))
+      (is (= 6 (count (article-info-map query-list doi)))))))
